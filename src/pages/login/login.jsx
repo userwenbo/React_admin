@@ -6,6 +6,7 @@ import logo from "./images/logo.png";
 import { reqLogin} from '../../api'
 import "./login.less";
 import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils'
 
 
 
@@ -20,7 +21,8 @@ class Login extends Component {
       if(result.status===0){    //請求成功
         const user = result.data  //請求登錄失敗        respones.data是axios中封裝的data 存放响应体数据
                                       //result.data是接口中的data   有一个对象属性
-        localStorage.setItem('user_key',JSON.stringify(user)) 
+        // localStorage.setItem('user_key',JSON.stringify(user)) 
+        storageUtils.saveUser(user)
         memoryUtils.user=user                                            //只能存文本  如果存对象 要tostring [object onject]                         
         this.props.history.replace('/')       //要转化为json
       }else{      
@@ -47,10 +49,11 @@ class Login extends Component {
     }
   };
   render() {
-    const {_id}=memoryUtils.user
-    if (_id) {
-      //一定要return,返回虚拟DOM
-      return <Redirect to='/'></Redirect>
+    const user = memoryUtils.user
+    // 如果登陆
+    if (user._id) {
+      // 自动跳转到admin
+      return <Redirect to="/"></Redirect>
     }
     const form = this.props.form;
     const getFieldDecorator = this.props.form.getFieldDecorator;
