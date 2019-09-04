@@ -6,5 +6,6 @@ import storageUtils from './storageUtils'
 // const user = JSON.parse(localStorage.getItem('user_key') || '{}')
 
 export default{
-   user:storageUtils.getUser() 
+   user:storageUtils.getUser(),
+   product:{},  //需要显示的商品
 }
