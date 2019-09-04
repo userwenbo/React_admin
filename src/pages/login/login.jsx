@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Icon, Input, Button ,message} from "antd";
 import { Redirect } from "react-router-dom";
 
-import logo from "./images/logo.png";
+import logo from "../../assets/images/logo.png";
 import { reqLogin} from '../../api'
 import "./login.less";
 import memoryUtils from '../../utils/memoryUtils'
@@ -55,7 +55,7 @@ class Login extends Component {
       // 自动跳转到admin
       return <Redirect to="/"></Redirect>
     }
-    const form = this.props.form;
+    // const form = this.props.form;
     const getFieldDecorator = this.props.form.getFieldDecorator;
 
     return (
