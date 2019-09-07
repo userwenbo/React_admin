@@ -3,15 +3,27 @@ import { Link, withRouter } from 'react-router-dom'
 import  logo   from '../../assets/images/logo.png'
 import { Menu, Icon} from 'antd';
 import menuList from '../../config/menuConfig'
+import memoryUtils from '../../utils/memoryUtils'
 
 import "./index.less"
 const { SubMenu ,Item} = Menu;
 
  class LeftNav extends Component {
+   hasAuth=(item)=>{
+     const user = memoryUtils.user
+    const menus = user.role.menus
+     if (user.username==='admin' || item.isPublic || menus.indexOf(item.key)!=-1) {
+      return true
+    } else if (item.children) {
+      return item.children.some(cItem => menus.indexOf(cItem.key)!=-1)
+    }
+    return false
+  }
   getMenuNodes=(menuList)=>{
     const path=this.props.location.pathname
      return menuList.map(item=>{
-        if(!item.children){
+       if(this.hasAuth(item)){
+       if(!item.children){
             return (
               <Item key={item.key}>
                  <Link to={item.key}>
@@ -37,6 +49,7 @@ const { SubMenu ,Item} = Menu;
             </SubMenu>
           )
         }
+       } 
      })
   }
    UNSAFE_componentWillMount(){

@@ -9,9 +9,14 @@ export default class ProductHome extends Component {
     products: [], // 当前页的商品数组
     total: 0, // 总商品数量
     searchType: 'productName',        /* 前台分页和后台分页 */
-    searchName: ''
+    searchName: '',
+    loading: false
   }
   getProducts=async (pageNum)=>{
+     // 显示loading
+    this.setState({
+      loading: true
+    });
     this.current=pageNum
     let result
     const {searchName,searchType}=this.state
@@ -24,9 +29,10 @@ export default class ProductHome extends Component {
      if(result.status===0){
         const {list,total}=result.data
         this.setState({
-          products:list,
-          total
-        })
+          products: list,
+          total,
+          loading: false
+        });
       
      }
   }
@@ -91,7 +97,9 @@ export default class ProductHome extends Component {
               >
                 详情
               </LinkButton>
-              <LinkButton>修改</LinkButton>
+              <LinkButton onClick={()=>{
+                 this.props.history.push(`/product/addupdate/`,product);
+              }}>修改</LinkButton>
             </span>
           );
         }
@@ -102,9 +110,12 @@ export default class ProductHome extends Component {
     this.getProducts(1)
   }
   render() {
-     const { products, total, searchType, searchName } = this.state;
+     const { products, total, searchType, searchName ,loading} = this.state;
        const extra = (
-         <Button type="primary">
+         <Button type="primary" onClick={()=>{
+             this.props.history.push(`/product/addupdate/`)
+         }}
+         >
            <Icon type="plus"></Icon>
            添加商品
          </Button>
@@ -146,9 +157,9 @@ export default class ProductHome extends Component {
          </div>
        );
     return (
-      
        <Card title={title} extra={extra}>
         <Table
+        loading={loading}
         bordered
         dataSource={products}
         rowKey="_id"

@@ -11,6 +11,7 @@ const menuList=[
     title:'商品',
     key:'/products',
     icon: 'appstore',
+    isPublic:true, //是否是公开的
     children:[
       {
         title:'品类管理',
