@@ -3,15 +3,15 @@
  */
 const menuList=[
   {
-    title:'首页',
-    key:'/home',
-    icon:'home'
+    title: '首页', // 菜单标题名称
+    key: '/home', // 对应的path
+    icon: 'home', // 图标名称
+    isPublic: true, // 是否是公开的
   },
   {
     title:'商品',
     key:'/products',
     icon: 'appstore',
-    isPublic:true, //是否是公开的
     children:[
       {
         title:'品类管理',

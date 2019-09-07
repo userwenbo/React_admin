@@ -16,7 +16,7 @@ export default class AuthForm extends Component {
        checkedKeys=role.menus
     }
     this.state={
-      checkedKeys   
+      checkedKeys  
     }
 
   }
@@ -52,17 +52,15 @@ export default class AuthForm extends Component {
           <Input value={name} disabled />
         </Item>
         <Tree
-        checkable  //是否可以选择
-        defaultExpandAll
-        checkedKeys={checkedKeys}
-        onCheck={this.handleCheck}
-      >
-        <TreeNode title="平台权限" key="all">
-          {
-             this.getTreeNodes(menuList)
-          }            
-        </TreeNode>
-      </Tree>
+          checkable
+          defaultExpandAll
+          checkedKeys={checkedKeys}
+          onCheck={this.handleCheck}
+        >
+          <TreeNode title="平台权限" key="all">
+            {this.getTreeNodes(menuList)}
+          </TreeNode>
+        </Tree>
       </>
     );
   }
