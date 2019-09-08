@@ -34,7 +34,7 @@ const {Footer, Sider, Content } = Layout;
           <Header></Header>
           <Content style={{ backgroundColor: 'white', margin: '20px 20px 0' }}>
                 <Switch>
-                    <Redirect from='/' to='home' />  {/* 必须是精确匹配 */}
+                    <Redirect from='/' to='home'  exact/>       {/*  必须是精确匹配 */}
                     <Route path='/home' component={Home} />
                     <Route path='/category' component={Category} />
                     <Route path='/product' component={Product} />

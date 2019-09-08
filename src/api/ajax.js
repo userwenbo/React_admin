@@ -3,6 +3,7 @@ import qs from 'qs'
 import {message} from 'antd'
 //指定基地址
 // axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL =process.env.NODE_ENV==='production'?'/react_api':''     //直接写api也可以 标识而已
 /* 将post请求参数转换为urlencoded(默认json格式) */
 axios.interceptors.request.use((config)=>{
    let data=config.data
