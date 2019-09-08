@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Form, Icon, Input, Button ,message} from "antd";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
+import { login } from "../../redux/actions";
 import logo from "../../assets/images/logo.png";
 import { reqLogin} from '../../api'
 import "./login.less";
@@ -16,22 +18,22 @@ class Login extends Component {
     const form = this.props.form;
     form.validateFields(async (error, {username, password}) => {
       if (!error) {
-       
-      const result =await reqLogin(username,password)  //返回promise,不想用 await
-      if(result.status===0){    //請求成功
-        const user = result.data  //請求登錄失敗        respones.data是axios中封裝的data 存放响应体数据
-                                      //result.data是接口中的data   有一个对象属性
-        // localStorage.setItem('user_key',JSON.stringify(user)) 
-        storageUtils.saveUser(user)
-        memoryUtils.user=user                                            //只能存文本  如果存对象 要tostring [object onject]                         
-        this.props.history.replace('/')       //要转化为json
-      }else{      
-         message.error(result.msg)
-      }
+        this.props.login({ username, password });
+      // const result =await reqLogin(username,password)  //返回promise,不想用 await
+      // if(result.status===0){    //請求成功
+      //   const user = result.data  //請求登錄失敗        respones.data是axios中封裝的data 存放响应体数据
+      //                                 //result.data是接口中的data   有一个对象属性
+      //   // localStorage.setItem('user_key',JSON.stringify(user)) 
+      //   storageUtils.saveUser(user)
+      //   memoryUtils.user=user                                            //只能存文本  如果存对象 要tostring [object onject]                         
+      //   this.props.history.replace('/')       //要转化为json
+      // }else{      
+      //    message.error(result.msg)
+      // }
       } else {
         console.log("前台表单验证失败");
       }
-    });
+    }); 
   };
 
   validatePwd = (rule, value, callback) => {
@@ -49,7 +51,7 @@ class Login extends Component {
     }
   };
   render() {
-    const user = memoryUtils.user
+    const user = this.props.user
     // 如果登陆
     if (user._id) {
       // 自动跳转到admin
@@ -65,6 +67,7 @@ class Login extends Component {
           <h1>后台管理系统</h1>
         </div>
         <div className="login-content">
+          {user.msg?<div style={{color:'red'}}>{user.msg}</div>:null}
           <h1>用户登录</h1>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item>
@@ -123,4 +126,9 @@ class Login extends Component {
 }
 
 const WrappedLogin = Form.create()(Login);
-export default WrappedLogin;
+export default connect(
+   state=>({
+      user:state.user
+   }),
+   {login}
+)(WrappedLogin);

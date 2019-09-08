@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import { Modal} from 'antd';
+import {connect} from "react-redux";
+import {logout} from '../../redux/actions'
 import { reqWeather } from '../../api'
 import menuConfig from  '../../config/menuConfig'
 import memoryUtils from '../../utils/memoryUtils'
@@ -48,9 +50,10 @@ const { confirm } = Modal;
           confirm({
             title: '確定要退出?',
             onOk:()=>{
-               storageUtils.removeUser()
-               memoryUtils.user={}
-               this.props.history.replace('./login')
+              //  storageUtils.removeUser()
+              //  memoryUtils.user={}
+              //  this.props.history.replace('./login')
+              this.props.logout()     //状态一旦变化，render就会重新渲染
             },
             onCancel() { 
                console.log('cancel') 
@@ -65,9 +68,9 @@ const { confirm } = Modal;
          this.getWeather()
        }
   render() {
-    const { username } = memoryUtils.user
+    const { username } = this.props.user
     const { currentTime, dayPictureUrl, weather} = this.state
-    const title=this.getTitle()
+    const title=this.props.headerTitle
     return (
       <div className='header'>
         <div className='header-top'>欢迎, {username}  &nbsp;
@@ -85,4 +88,10 @@ const { confirm } = Modal;
     )
   }
 }
-export default  withRouter(Header)
+export default  withRouter(connect(
+   state=>({
+     headerTitle:state.headerTitle,
+     user:state.user
+   }),
+   {logout}
+)(Header))

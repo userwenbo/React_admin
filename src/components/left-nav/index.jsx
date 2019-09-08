@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import {connect} from 'react-redux'
+
+import { setHeradertitle } from "../../redux/actions"
 import  logo   from '../../assets/images/logo.png'
 import { Menu, Icon} from 'antd';
 import menuList from '../../config/menuConfig'
@@ -10,7 +13,7 @@ const { SubMenu ,Item} = Menu;
 
  class LeftNav extends Component {
    hasAuth=(item)=>{
-     const user = memoryUtils.user
+     const user = this.props.user
     const menus = user.role.menus
      if (user.username==='admin' || item.isPublic || menus.indexOf(item.key)!=-1) {
       return true
@@ -24,9 +27,13 @@ const { SubMenu ,Item} = Menu;
      return menuList.map(item=>{
        if(this.hasAuth(item)){
        if(!item.children){
+         //如果path与item的key匹配，将item的title保存到状态中去
+         if(path.indexOf(item.key)===0){
+             this.props.setHeradertitle(item.title)
+         }
             return (
-              <Item key={item.key}>
-                 <Link to={item.key}>
+              <Item key={item.key}> 
+                 <Link to={item.key} onClick={()=>this.props.setHeradertitle(item.title)}>
                    <Icon type={item.icon} />
                    <span>{item.title}</span>
                  </Link> 
@@ -78,7 +85,12 @@ const { SubMenu ,Item} = Menu;
     )
   }
 }
-export default withRouter(LeftNav)
+export default withRouter(connect(
+   state=>({
+     user:state.user
+   }),
+   {setHeradertitle}
+)(LeftNav))
 /*
 1. 刷新/点击时, 选中相应的菜单项
   a. 使用withRouter()包装LeftNav, 向其传入history/location/match
